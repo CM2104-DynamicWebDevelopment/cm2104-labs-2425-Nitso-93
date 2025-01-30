@@ -28,4 +28,28 @@ app.get('/add', function(req,res)
     res.send("X + Y = "+(x+y));
 });
 
+app.get('/calc', function(req,res)
+{
+    var x=parseInt(req.query.x);
+    var y=parseInt(req.query.y);
+    var operator=req.query.operator;
+    
+    if(operator=="sum")
+    {
+        res.send("X + Y = "+(x+y));
+    }
+    else if(operator=="sub")
+    {
+        res.send("X - Y = "+(x-y));
+    }
+    else if(operator=="mul")
+    {
+        res.send("X * Y = "+(x*y));
+    }
+    else if(operator=="div")
+    {
+        res.send("X / Y = "+(x/y));
+    }
+});
+
 app.listen(8080);
