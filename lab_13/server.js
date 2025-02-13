@@ -9,6 +9,7 @@ const app = express();
 
 //code to define the public 
 app.use(express.static('public'));
+app.use(express.urlencoded({extended:true}));
 var db;
 
 //run the connect method.
@@ -24,6 +25,7 @@ async function connectDB()
     app.listen(8080);
 }
 
+//Displaying the quotes
 app.get('/all', function(req, res)
 {
     db.collection('quotes').find().toArray(function(err, result)
@@ -39,5 +41,16 @@ app.get('/all', function(req, res)
         }
 
     res.send(output);
-    });
-});
+    })
+})
+
+//Adding a quote
+app.post('/quotes', function (req, res)
+{
+    db.collection('quotes').insertOne(req.body, function(err, result)
+    {
+        if (err) throw err;
+        console.log('saved to database')
+        res.redirect('/')
+    })
+})
