@@ -25,7 +25,7 @@ async function connectDB()
     app.listen(8080);
 }
 
-//Displaying the quotes
+//All Route
 app.get('/all', function(req, res)
 {
     db.collection('quotes').find().toArray(function(err, result)
@@ -41,10 +41,10 @@ app.get('/all', function(req, res)
         }
 
     res.send(output);
-    })
-})
+    });
+});
 
-//Adding a quote
+//Add Route
 app.post('/quotes', function (req, res)
 {
     db.collection('quotes').insertOne(req.body, function(err, result)
@@ -52,5 +52,33 @@ app.post('/quotes', function (req, res)
         if (err) throw err;
         console.log('saved to database')
         res.redirect('/')
-    })
-})
+    });
+});
+
+//Filter Route
+app.post('/search', function(req, res)
+{
+    db.collection('quotes').find(req.body).toArray(function(err, result)
+    {
+        if (err) throw err;
+        var output = "<h1>All the quotes</h1>";
+        for (var i = 0; i < result.length; i++)
+        {
+            output += "<div>";
+            output += "<h3>" + result[i].name + "</h3>";
+            output += "<p>" + result[i].quote + "</p>";
+            output += "</div>";
+        }
+    res.send(output);
+    });
+});
+
+//Delete Route
+app.post('/delete', function(req, res)
+{
+    db.collection('quotes').deleteOne(req.body, function(err, result)
+    {
+        if (err) throw err;
+        res.redirect('/');
+    });
+});
